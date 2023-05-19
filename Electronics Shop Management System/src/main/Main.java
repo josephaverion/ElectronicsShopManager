@@ -1,15 +1,16 @@
 package main;
-
 import java.awt.EventQueue;
 import screen.*;
-
 import javax.swing.JFrame;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
+import database.Database;
 
 public class Main {
 	private JFrame frame;
+	
 
 	/**
 	 * Launch the application.
@@ -28,11 +29,14 @@ public class Main {
 	}
 
 	/**
+	 * Create the application and connect to database
 	 * Create the application.
 	 */
 	public Main() {
-		initialize();
+		Database.connect();
+		initialize();		
 	}
+
 
 	/**
 	 * Initialize the contents of the frame.
@@ -52,6 +56,5 @@ public class Main {
 		frame.getContentPane().add(mainPanel);
 		mainPanel.setLayout(new CardLayout(0, 0));
 		
-
 	}
 }
