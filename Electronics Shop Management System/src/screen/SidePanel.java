@@ -6,8 +6,6 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import customJComponent.CustomJButton;
-import screen.CategoryPanel;
-import database.Database;
 
 public class SidePanel extends JPanel {
 
@@ -15,7 +13,7 @@ public class SidePanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Create the panel.
 	 */
@@ -31,7 +29,6 @@ public class SidePanel extends JPanel {
 		
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
 				MainPanel.setPanel(MainPanel.PANELS.HOME);
 			}
 		});
@@ -53,7 +50,6 @@ public class SidePanel extends JPanel {
 		CustomJButton categoryButton = new CustomJButton();
 		categoryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
 				MainPanel.setPanel(MainPanel.PANELS.CATEGORY);
 			}
 		});
@@ -75,7 +71,6 @@ public class SidePanel extends JPanel {
 		CustomJButton brandButton = new CustomJButton();
 		brandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
 				MainPanel.setPanel(MainPanel.PANELS.BRAND);
 			}
 		});
@@ -97,7 +92,6 @@ public class SidePanel extends JPanel {
 		CustomJButton productButton = new CustomJButton();
 		productButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
 				MainPanel.setPanel(MainPanel.PANELS.PRODUCT);
 			}
 		});
@@ -119,7 +113,6 @@ public class SidePanel extends JPanel {
 		CustomJButton ordersButton = new CustomJButton();
 		ordersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
 				MainPanel.setPanel(MainPanel.PANELS.ORDERS);
 			}
 		});
@@ -152,5 +145,8 @@ public class SidePanel extends JPanel {
 		JLabel titleImg = new JLabel(new ImageIcon(this.getClass().getResource("/electronics.png")));
 		titleImg.setBounds(10, 22, 208, 122);
 		add(titleImg);
+		
+		
+
 	}
 }

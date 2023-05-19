@@ -9,11 +9,11 @@ public class MainPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static HomePanel homePanel; 
-	private static CategoryPanel categoryPanel;
-	private static BrandPanel brandPanel;
-	private static ProductPanel productPanel;
-	private static OrdersPanel ordersPanel;
+	protected static HomePanel homePanel; 
+	protected static CategoryPanel categoryPanel;
+	protected static BrandPanel brandPanel;
+	protected static ProductPanel productPanel;
+	protected static OrdersPanel ordersPanel;
 	
 	protected static JPanel currentPanel;
 

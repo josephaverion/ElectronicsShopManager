@@ -18,12 +18,11 @@ import javax.swing.border.EtchedBorder;
 
 import customJComponent.CustomJButton;
 
-import java.sql.*;
-import main.Main;
 public class BrandPanel extends JPanel {
 
-	PreparedStatement pst;
-			
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -87,9 +86,6 @@ public class BrandPanel extends JPanel {
 		addPanel.add(statusLabel);
 		
 		CustomJButton addButton = new CustomJButton();
-		
-
-		
 		addButton.setText("Add");
 		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		addButton.setFocusable(false);
@@ -212,4 +208,5 @@ public class BrandPanel extends JPanel {
 		editPanelButton.setBounds(196, 695, 89, 26);
 		add(editPanelButton);
 	}
+
 }
