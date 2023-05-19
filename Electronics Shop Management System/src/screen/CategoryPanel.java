@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -15,11 +16,14 @@ import java.awt.CardLayout;
 
 
 import customJComponent.CustomJButton;
+import database.Database;
 
 import javax.swing.border.EtchedBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class CategoryPanel extends JPanel {
 
@@ -27,16 +31,17 @@ public class CategoryPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	public static JTable categoryTable;
+	
 	/**
 	 * Create the panel.
 	 */
 	public CategoryPanel() {
+			
 		setBackground(Color.WHITE);
 		setBounds(227, 0, 1180, 773);
 		setLayout(null);
 
-		
 		
 		JLabel topBorder = new JLabel();
 		topBorder.setOpaque(true);
@@ -91,6 +96,22 @@ public class CategoryPanel extends JPanel {
 		addPanel.add(statusLabel);
 		
 		CustomJButton addButton = new CustomJButton();
+		
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cname = categoryTxt.getText().trim();
+				if(cname.equals("")) {
+					JOptionPane.showMessageDialog(null, "Please Type Something");
+					return;
+				}
+				String cavailible = availability.getSelectedItem().equals("Available") ? "YES" : "NO";
+				Database.addCategory(cname, cavailible);
+				Database.updateTables();
+				categoryTxt.setText("");
+				JOptionPane.showMessageDialog(null, "Category Added!");
+			}
+		});
+		
 		addButton.setText("Add");
 		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		addButton.setFocusable(false);
@@ -115,10 +136,10 @@ public class CategoryPanel extends JPanel {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(21, 176, 1086, 334);
-		overviewPanel.add(scrollPane);
-		
-		JTable categoryTable = new JTable();
+		overviewPanel.add(scrollPane);	
+		categoryTable = new JTable();
 		scrollPane.setViewportView(categoryTable);
+		Database.updateTables();
 		
 		JPanel editPanel = new JPanel();
 		editPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -134,8 +155,7 @@ public class CategoryPanel extends JPanel {
 		JTextField categoryTxt2 = new JTextField();
 		categoryTxt2.setBounds(342, 242, 274, 20);
 		categoryTxt2.setColumns(10);
-		editPanel.add(categoryTxt2);
-		
+		editPanel.add(categoryTxt2);	
 		
 		JLabel nameLabel2 = new JLabel("Category Name");
 		nameLabel2.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -153,8 +173,7 @@ public class CategoryPanel extends JPanel {
 		statusLabel2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		statusLabel2.setBounds(693, 217, 104, 20);
 		editPanel.add(statusLabel2);
-		
-		
+			
 		CustomJButton editButton = new CustomJButton();
 		editButton.setText("Edit");
 		editButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -168,6 +187,22 @@ public class CategoryPanel extends JPanel {
 		editPanel.add(editButton);
 		
 		JTextField idTxt = new JTextField();
+		idTxt.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
+				String cId = idTxt.getText();
+				String[] data = Database.getCategory(cId);
+				categoryTxt2.setText(data[0]);
+				String cavailible = "";
+				try {
+					cavailible = data[1].equals("YES") ? "Available" : "Not Available";
+				} catch (Exception ex) {
+					
+				}
+				availability2.setSelectedItem(cavailible);
+			}
+		});
 		idTxt.setColumns(10);
 		idTxt.setBounds(342, 295, 85, 20);
 		editPanel.add(idTxt);
@@ -180,6 +215,7 @@ public class CategoryPanel extends JPanel {
 		JButton addPanelButton = new JButton("Add");
 		addPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Database.updateTables();
 				overviewPanel.setVisible(false);
 				editPanel.setVisible(false);
 				addPanel.setVisible(true);
@@ -192,6 +228,7 @@ public class CategoryPanel extends JPanel {
 		JButton overviewPanelButton = new JButton("Overview");
 		overviewPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Database.updateTables();
 				addPanel.setVisible(false);
 				editPanel.setVisible(false);
 				overviewPanel.setVisible(true);
@@ -204,6 +241,7 @@ public class CategoryPanel extends JPanel {
 		JButton editPanelButton = new JButton("Edit");
 		editPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Database.updateTables();
 				addPanel.setVisible(false);
 				overviewPanel.setVisible(false);
 				editPanel.setVisible(true);

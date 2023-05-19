@@ -7,10 +7,11 @@ import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
+import database.Database;
 
 public class Main {
 	private JFrame frame;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -28,11 +29,13 @@ public class Main {
 	}
 
 	/**
-	 * Create the application.
+	 * Create the application and connect to database
 	 */
 	public Main() {
-		initialize();
+		Database.connect();
+		initialize();		
 	}
+	
 
 	/**
 	 * Initialize the contents of the frame.
