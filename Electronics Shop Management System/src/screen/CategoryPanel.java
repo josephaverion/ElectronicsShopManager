@@ -16,14 +16,20 @@ import java.awt.CardLayout;
 
 
 import customJComponent.CustomJButton;
+import customJComponent.TableActionCellEditor;
+import customJComponent.TableActionCellRender;
+import customJComponent.TableActionEvent;
 import database.Database;
 
 import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class CategoryPanel extends JPanel {
 
@@ -36,6 +42,7 @@ public class CategoryPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
+	@SuppressWarnings("serial")
 	public CategoryPanel() {
 		setBackground(Color.WHITE);
 		setBounds(227, 0, 1180, 773);
@@ -102,8 +109,13 @@ public class CategoryPanel extends JPanel {
 					return;
 				}
 				String cavailible = availability.getSelectedItem().equals("Available") ? "YES" : "NO";
-				Database.addCategory(cname, cavailible);
-				Database.updateTables();
+				//Database.addCategory(cname, cavailible);
+				String[] columns = {"category_name", "category_availability"};
+				ArrayList<Object> toAdd = new ArrayList<Object>();
+				toAdd.add(cname);
+				toAdd.add(cavailible);
+				Database.addEntry(columns, toAdd, "categories");
+				Database.refreshTables();
 				categoryTxt.setText("");
 				JOptionPane.showMessageDialog(null, "Category Added!");
 			}
@@ -135,10 +147,88 @@ public class CategoryPanel extends JPanel {
 		scrollPane.setBounds(21, 176, 1086, 334);
 		overviewPanel.add(scrollPane);
 		
+
+	
 		categoryTable = new JTable();
+		categoryTable.setRowHeight(40);
 		scrollPane.setViewportView(categoryTable);
-		Database.updateTables();
+		categoryTable.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, "", null, null},
+				{null, "", null, null},
+				{"", "", null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+			},
+			new String[] {
+				"ID", "Name", "Tel", "Action"
+			}
+		) {
+
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		
+		TableActionEvent event = new TableActionEvent() {
+			public void onEdit(int row) {
+				System.out.println("Edit row: " + row);
+			}
+			
+			public void onDelete(int row) {
+				System.out.println("Delete row: " + row);
+			}
+			
+			public void onView(int row) {
+				System.out.println("View row: " + row);
+			}
+		};
+		categoryTable.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRender());
+		categoryTable.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(event));
+		//categoryTable.setValueAt("Hi", 1, 1);
+		Database.refreshTables();
+			
 		JPanel editPanel = new JPanel();
 		editPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		editPanel.setBackground(Color.WHITE);
@@ -173,18 +263,6 @@ public class CategoryPanel extends JPanel {
 		statusLabel2.setBounds(693, 217, 104, 20);
 		editPanel.add(statusLabel2);
 		
-		CustomJButton editButton = new CustomJButton();
-		editButton.setText("Edit");
-		editButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		editButton.setFocusable(false);
-		editButton.setColorOver(new Color(0, 240, 145));
-		editButton.setColorClick(new Color(32, 255, 166));
-		editButton.setColor(new Color(0, 211, 127));
-		editButton.setBorderColor(Color.WHITE);
-		editButton.setBackground(new Color(0, 211, 127));
-		editButton.setBounds(340, 326, 97, 41);
-		editPanel.add(editButton);
-		
 		JTextField idTxt = new JTextField();
 		
 		idTxt.addKeyListener(new KeyAdapter() {
@@ -193,30 +271,79 @@ public class CategoryPanel extends JPanel {
 
 				String cId = idTxt.getText();
 				String[] data = Database.getCategory(cId);
+				if (data == null) {
+					JOptionPane.showMessageDialog(null, "Category Doesn't Exist");
+					return;
+				}
 				categoryTxt2.setText(data[0]);
 				String cavailible = "";
-				try {
-					cavailible = data[1].equals("YES") ? "Available" : "Not Available";
-				} catch (Exception ex) {
+				cavailible = data[1].equals("YES") ? "Available" : "Not Available";
 
-				}
 				availability2.setSelectedItem(cavailible);
 			}
 		});
 		
 		idTxt.setColumns(10);
-		idTxt.setBounds(342, 295, 85, 20);
+		idTxt.setBounds(342, 186, 85, 20);
 		editPanel.add(idTxt);
 		
-		JLabel idLabel = new JLabel("Category ID");
+		JLabel idLabel = new JLabel("Search By Category ID");
 		idLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		idLabel.setBounds(341, 271, 104, 20);
+		idLabel.setBounds(342, 155, 156, 20);
 		editPanel.add(idLabel);
+		
+		CustomJButton editButton = new CustomJButton();
+		editButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cname = categoryTxt2.getText().trim();
+				if (cname.equals("")) {
+					JOptionPane.showMessageDialog(null, "Please Type Something");
+					return;
+				}
+				String cavailible = availability2.getSelectedItem().equals("Available") ? "YES" : "NO";
+				int cId = Integer.parseInt(idTxt.getText());
+				Database.editCategory(cname, cavailible, cId);
+				//Database.refreshTables();
+				categoryTxt.setText("");
+				JOptionPane.showMessageDialog(null, "Category Edited!");
+			}
+		});
+		editButton.setText("Edit");
+		editButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		editButton.setFocusable(false);
+		editButton.setColorOver(new Color(0, 240, 145));
+		editButton.setColorClick(new Color(32, 255, 166));
+		editButton.setColor(new Color(0, 211, 127));
+		editButton.setBorderColor(Color.WHITE);
+		editButton.setBackground(new Color(0, 211, 127));
+		editButton.setBounds(340, 280, 97, 41);
+		editPanel.add(editButton);
+		
+		CustomJButton deleteButton = new CustomJButton();
+		deleteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int cId = Integer.parseInt(idTxt.getText());
+				Database.deleteCategory(cId);
+				// Database.refreshTables();
+				categoryTxt.setText("");
+				JOptionPane.showMessageDialog(null, "Category Deleted!");
+			}
+		});
+		deleteButton.setText("Delete");
+		deleteButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		deleteButton.setFocusable(false);
+		deleteButton.setColorOver(new Color(0, 240, 145));
+		deleteButton.setColorClick(new Color(32, 255, 166));
+		deleteButton.setColor(new Color(0, 211, 127));
+		deleteButton.setBorderColor(Color.WHITE);
+		deleteButton.setBackground(new Color(0, 211, 127));
+		deleteButton.setBounds(475, 280, 97, 41);
+		editPanel.add(deleteButton);
 		
 		JButton addPanelButton = new JButton("Add");
 		addPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				overviewPanel.setVisible(false);
 				editPanel.setVisible(false);
 				addPanel.setVisible(true);
@@ -229,7 +356,7 @@ public class CategoryPanel extends JPanel {
 		JButton overviewPanelButton = new JButton("Overview");
 		overviewPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				addPanel.setVisible(false);
 				editPanel.setVisible(false);
 				overviewPanel.setVisible(true);
@@ -242,7 +369,7 @@ public class CategoryPanel extends JPanel {
 		JButton editPanelButton = new JButton("Edit");
 		editPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				addPanel.setVisible(false);
 				overviewPanel.setVisible(false);
 				editPanel.setVisible(true);

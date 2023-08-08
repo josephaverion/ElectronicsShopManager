@@ -96,7 +96,7 @@ public class ProductPanel extends JPanel {
 		addButton.setColor(new Color(0, 211, 127));
 		addButton.setBorderColor(Color.WHITE);
 		addButton.setBackground(new Color(0, 211, 127));
-		addButton.setBounds(340, 328, 97, 41);
+		addButton.setBounds(340, 315, 97, 41);
 		addPanel.add(addButton);
 		
 		JLabel quantityLabel = new JLabel("Quantity");
@@ -202,18 +202,30 @@ public class ProductPanel extends JPanel {
 		editButton.setColor(new Color(0, 211, 127));
 		editButton.setBorderColor(Color.WHITE);
 		editButton.setBackground(new Color(0, 211, 127));
-		editButton.setBounds(340, 369, 97, 41);
+		editButton.setBounds(340, 315, 97, 41);
 		editPanel.add(editButton);
 		
 		JTextField idTxt = new JTextField();
 		idTxt.setColumns(10);
-		idTxt.setBounds(342, 335, 85, 20);
+		idTxt.setBounds(342, 147, 85, 20);
 		editPanel.add(idTxt);
 		
-		JLabel idLabel = new JLabel("Product ID");
+		JLabel idLabel = new JLabel("Search By Product ID");
 		idLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		idLabel.setBounds(342, 304, 104, 20);
+		idLabel.setBounds(342, 113, 162, 20);
 		editPanel.add(idLabel);
+		
+		CustomJButton deleteButton = new CustomJButton();
+		deleteButton.setText("Delete");
+		deleteButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		deleteButton.setFocusable(false);
+		deleteButton.setColorOver(new Color(0, 240, 145));
+		deleteButton.setColorClick(new Color(32, 255, 166));
+		deleteButton.setColor(new Color(0, 211, 127));
+		deleteButton.setBorderColor(Color.WHITE);
+		deleteButton.setBackground(new Color(0, 211, 127));
+		deleteButton.setBounds(475, 315, 97, 41);
+		editPanel.add(deleteButton);
 		
 		JLabel quantityLabel2 = new JLabel("Quantity");
 		quantityLabel2.setFont(new Font("Tahoma", Font.PLAIN, 14));

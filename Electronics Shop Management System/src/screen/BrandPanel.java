@@ -159,18 +159,30 @@ public class BrandPanel extends JPanel {
 		editButton.setColor(new Color(0, 211, 127));
 		editButton.setBorderColor(Color.WHITE);
 		editButton.setBackground(new Color(0, 211, 127));
-		editButton.setBounds(340, 326, 97, 41);
+		editButton.setBounds(340, 280, 97, 41);
 		editPanel.add(editButton);
 		
 		JTextField idTxt = new JTextField();
 		idTxt.setColumns(10);
-		idTxt.setBounds(342, 295, 85, 20);
+		idTxt.setBounds(342, 186, 85, 20);
 		editPanel.add(idTxt);
 		
-		JLabel idLabel = new JLabel("Brand ID");
+		JLabel idLabel = new JLabel("Search By Brand ID");
 		idLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		idLabel.setBounds(341, 271, 104, 20);
+		idLabel.setBounds(342, 155, 156, 20);
 		editPanel.add(idLabel);
+		
+		CustomJButton deleteButton = new CustomJButton();
+		deleteButton.setText("Delete");
+		deleteButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		deleteButton.setFocusable(false);
+		deleteButton.setColorOver(new Color(0, 240, 145));
+		deleteButton.setColorClick(new Color(32, 255, 166));
+		deleteButton.setColor(new Color(0, 211, 127));
+		deleteButton.setBorderColor(Color.WHITE);
+		deleteButton.setBackground(new Color(0, 211, 127));
+		deleteButton.setBounds(475, 280, 97, 41);
+		editPanel.add(deleteButton);
 		
 		JButton addPanelButton = new JButton("Add");
 		addPanelButton.addActionListener(new ActionListener() {

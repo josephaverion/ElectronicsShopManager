@@ -31,7 +31,7 @@ public class SidePanel extends JPanel {
 		
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				MainPanel.setPanel(MainPanel.PANELS.HOME);
 			}
 		});
@@ -53,7 +53,7 @@ public class SidePanel extends JPanel {
 		CustomJButton categoryButton = new CustomJButton();
 		categoryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				MainPanel.setPanel(MainPanel.PANELS.CATEGORY);
 			}
 		});
@@ -75,7 +75,7 @@ public class SidePanel extends JPanel {
 		CustomJButton brandButton = new CustomJButton();
 		brandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				MainPanel.setPanel(MainPanel.PANELS.BRAND);
 			}
 		});
@@ -97,7 +97,7 @@ public class SidePanel extends JPanel {
 		CustomJButton productButton = new CustomJButton();
 		productButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				MainPanel.setPanel(MainPanel.PANELS.PRODUCT);
 			}
 		});
@@ -119,7 +119,7 @@ public class SidePanel extends JPanel {
 		CustomJButton ordersButton = new CustomJButton();
 		ordersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database.updateTables();
+				//Database.refreshTables();
 				MainPanel.setPanel(MainPanel.PANELS.ORDERS);
 			}
 		});
