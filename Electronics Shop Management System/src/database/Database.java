@@ -2,10 +2,14 @@ package database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import customJComponent.TableActionCellEditor;
+import customJComponent.TableActionCellRender;
+import customJComponent.TableActionEvent;
 import net.proteanit.sql.DbUtils;
 
 import screen.CategoryPanel;
@@ -42,6 +46,8 @@ public class Database {
 */
 	// add parameter of how table name, arraylist of column names and arraylist of variables to add
 	
+	
+	// work on making this work for any panel
 	public static void editCategory(String cname, String cavailible, int cId) {
 		try {
 			pst = con.prepareStatement("UPDATE categories set category_name = ?, category_availability = ? WHERE category_id = ?");
@@ -54,35 +60,7 @@ public class Database {
 		}
 	}
 	
-	public static void addEntry(String[] columns, ArrayList<Object> toAdd, String tableName) {
-		try {
-			String columnNames = "";
-			String questionmarks = "";
-			for(int i = 0; i < columns.length; i++) {
-				columnNames = columnNames + columns[i];
-				questionmarks = questionmarks + "?";
-				if (i != columns.length - 1) {
-					columnNames = columnNames + ",";
-					questionmarks = questionmarks + ",";
-				}
-			}
-			pst = con.prepareStatement("INSERT INTO " + tableName + "(" + columnNames + ") VALUES (" + questionmarks + ")" );
-			// convert ints to a string?
-			for (int i = 0; i < toAdd.size(); i++) {
-				if(toAdd.get(i).getClass().equals(String.class)) {
-					pst.setString(i+1, (String) toAdd.get(i));
-				} else if (toAdd.get(i).getClass().equals(Integer.class)) {
-					pst.setInt(i+1, (Integer) toAdd.get(i));
-				}
-			}
-			pst.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-//	public static void editEntry(String[] columns, )
-	
+	// work on making this work for any panel
 	public static void deleteCategory(int cId) {
 		try {
 			pst = con.prepareStatement("DELETE FROM categories WHERE category_id = ?");
@@ -93,6 +71,7 @@ public class Database {
 		}
 	}
 
+	// work on making this work for any panel
 	public static String[] getCategory(String cId) {
 
 		try {
@@ -114,31 +93,60 @@ public class Database {
 			return null;
 		}
 	}
+	
+	public static void addEntry(String[] columns, ArrayList<Object> toAdd, String tableName) {
+		try {
+			String columnNames = "";
+			String questionmarks = "";
+			for(int i = 0; i < columns.length; i++) {
+				columnNames = columnNames + columns[i];
+				questionmarks = questionmarks + "?";
+				if (i != columns.length - 1) {
+					columnNames = columnNames + ",";
+					questionmarks = questionmarks + ",";
+				}
+			}
+			pst = con.prepareStatement("INSERT INTO " + tableName + "(" + columnNames + ") VALUES (" + questionmarks + ")" );
+			for (int i = 0; i < toAdd.size(); i++) {
+				if(toAdd.get(i).getClass().equals(String.class)) {
+					pst.setString(i+1, (String) toAdd.get(i));
+				} else if (toAdd.get(i).getClass().equals(Integer.class)) {
+					pst.setInt(i+1, (Integer) toAdd.get(i));
+				}
+			}
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+//	public static void editEntry(String[] columns, )
 
-	public static void refreshTables() {
+	public static void refreshTables(DefaultTableModel model) {
 		try {
 			pst = con.prepareStatement("SELECT * FROM categories");
 			rs = pst.executeQuery();
 			rsmd = rs.getMetaData();
 			
-			DefaultTableModel model = (DefaultTableModel) CategoryPanel.categoryTable.getModel();
 			int cols = rsmd.getColumnCount();
 			
-			int i = 0;
+			Object[] toUpdate = new Object[cols];
 			
 			while(rs.next()) {
-				for (int j = 1; j <= cols; j++) {
-					System.out.println(j);
-					if (j == 1)
-						CategoryPanel.categoryTable.setValueAt(rs.getInt(j), i, j-1);
-					else 
-						CategoryPanel.categoryTable.setValueAt(rs.getString(j), i, j-1);
+				for(int i = 0; i < cols; i++) {
+					System.out.println(rsmd.getColumnClassName(i+1));
+					if(rsmd.getColumnClassName(i+1).equals("java.lang.String")) {
+						System.out.println("here");
+						toUpdate[i] = rs.getString(i+1);
+					} else if (rsmd.getColumnClassName(i+1).equals("java.lang.Integer")) {
+						System.out.println("here");
+						toUpdate[i] = rs.getInt(i+1);
+					}
 				}
-				i++;
+				System.out.println(Arrays.toString(toUpdate));
+				model.addRow(toUpdate);
 			}
 			
-			
-			//CategoryPanel.categoryTable.setModel(DbUtils.resultSetToTableModel(rs));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

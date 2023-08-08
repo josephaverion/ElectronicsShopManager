@@ -99,39 +99,6 @@ public class CategoryPanel extends JPanel {
 		statusLabel.setBounds(693, 217, 104, 20);
 		addPanel.add(statusLabel);
 		
-		CustomJButton addButton = new CustomJButton();
-		
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String cname = categoryTxt.getText().trim();
-				if(cname.equals("")) {
-					JOptionPane.showMessageDialog(null, "Please Type Something");
-					return;
-				}
-				String cavailible = availability.getSelectedItem().equals("Available") ? "YES" : "NO";
-				//Database.addCategory(cname, cavailible);
-				String[] columns = {"category_name", "category_availability"};
-				ArrayList<Object> toAdd = new ArrayList<Object>();
-				toAdd.add(cname);
-				toAdd.add(cavailible);
-				Database.addEntry(columns, toAdd, "categories");
-				Database.refreshTables();
-				categoryTxt.setText("");
-				JOptionPane.showMessageDialog(null, "Category Added!");
-			}
-		});
-		
-		addButton.setText("Add");
-		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		addButton.setFocusable(false);
-		addButton.setColorOver(new Color(0, 240, 145));
-		addButton.setColorClick(new Color(32, 255, 166));
-		addButton.setColor(new Color(0, 211, 127));
-		addButton.setBorderColor(Color.WHITE);
-		addButton.setBackground(new Color(0, 211, 127));
-		addButton.setBounds(340, 280, 97, 41);
-		addPanel.add(addButton);
-		
 		JPanel overviewPanel = new JPanel();
 		overviewPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		overviewPanel.setBackground(Color.WHITE);
@@ -154,52 +121,10 @@ public class CategoryPanel extends JPanel {
 		scrollPane.setViewportView(categoryTable);
 		categoryTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, "", null, null},
-				{null, "", null, null},
-				{"", "", null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
 				{null, null, null, null},
 			},
 			new String[] {
-				"ID", "Name", "Tel", "Action"
+				"ID", "Name", "Availability", "Action"
 			}
 		) {
 
@@ -224,11 +149,45 @@ public class CategoryPanel extends JPanel {
 				System.out.println("View row: " + row);
 			}
 		};
+		DefaultTableModel model = (DefaultTableModel) CategoryPanel.categoryTable.getModel();
+		Database.refreshTables(model);
 		categoryTable.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRender());
 		categoryTable.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(event));
-		//categoryTable.setValueAt("Hi", 1, 1);
-		Database.refreshTables();
-			
+		
+		
+		CustomJButton addButton = new CustomJButton();
+		
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cname = categoryTxt.getText().trim();
+				if(cname.equals("")) {
+					JOptionPane.showMessageDialog(null, "Please Type Something");
+					return;
+				}
+				String cavailible = availability.getSelectedItem().equals("Available") ? "YES" : "NO";
+				//Database.addCategory(cname, cavailible);
+				String[] columns = {"category_name", "category_availability"};
+				ArrayList<Object> toAdd = new ArrayList<Object>();
+				toAdd.add(cname);
+				toAdd.add(cavailible);
+				Database.addEntry(columns, toAdd, "categories");
+				Database.refreshTables(model);
+				categoryTxt.setText("");
+				JOptionPane.showMessageDialog(null, "Category Added!");
+			}
+		});
+		
+		addButton.setText("Add");
+		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		addButton.setFocusable(false);
+		addButton.setColorOver(new Color(0, 240, 145));
+		addButton.setColorClick(new Color(32, 255, 166));
+		addButton.setColor(new Color(0, 211, 127));
+		addButton.setBorderColor(Color.WHITE);
+		addButton.setBackground(new Color(0, 211, 127));
+		addButton.setBounds(340, 280, 97, 41);
+		addPanel.add(addButton);
+		
 		JPanel editPanel = new JPanel();
 		editPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		editPanel.setBackground(Color.WHITE);
