@@ -86,7 +86,6 @@ public class Database {
 				data[0] = rs.getString(1);
 				data[1] = rs.getString(2);
 			} 
-			System.out.println(rs);
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,7 +93,7 @@ public class Database {
 		}
 	}
 	
-	public static void addEntry(String[] columns, ArrayList<Object> toAdd, String tableName) {
+	public static void addEntry(String[] columns, Object[] toAdd, String tableName) {
 		try {
 			String columnNames = "";
 			String questionmarks = "";
@@ -107,11 +106,11 @@ public class Database {
 				}
 			}
 			pst = con.prepareStatement("INSERT INTO " + tableName + "(" + columnNames + ") VALUES (" + questionmarks + ")" );
-			for (int i = 0; i < toAdd.size(); i++) {
-				if(toAdd.get(i).getClass().equals(String.class)) {
-					pst.setString(i+1, (String) toAdd.get(i));
-				} else if (toAdd.get(i).getClass().equals(Integer.class)) {
-					pst.setInt(i+1, (Integer) toAdd.get(i));
+			for (int i = 0; i < toAdd.length; i++) {
+				if(toAdd[i].getClass().equals(String.class)) {
+					pst.setString(i+1, (String) toAdd[i]);
+				} else if (toAdd[i].getClass().equals(Integer.class)) {
+					pst.setInt(i+1, (Integer) toAdd[i]);
 				}
 			}
 			pst.executeUpdate();
@@ -131,19 +130,15 @@ public class Database {
 			int cols = rsmd.getColumnCount();
 			
 			Object[] toUpdate = new Object[cols];
-			
+			model.setRowCount(0);
 			while(rs.next()) {
 				for(int i = 0; i < cols; i++) {
-					System.out.println(rsmd.getColumnClassName(i+1));
 					if(rsmd.getColumnClassName(i+1).equals("java.lang.String")) {
-						System.out.println("here");
 						toUpdate[i] = rs.getString(i+1);
 					} else if (rsmd.getColumnClassName(i+1).equals("java.lang.Integer")) {
-						System.out.println("here");
 						toUpdate[i] = rs.getInt(i+1);
 					}
 				}
-				System.out.println(Arrays.toString(toUpdate));
 				model.addRow(toUpdate);
 			}
 			
