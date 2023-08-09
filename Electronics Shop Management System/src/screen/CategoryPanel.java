@@ -208,7 +208,6 @@ public class CategoryPanel extends JPanel {
 			}
 			
 			public void onView(int row) {
-				// probably remove this
 				System.out.println("View row: " + row);
 			}
 		};
@@ -259,7 +258,6 @@ public class CategoryPanel extends JPanel {
 				categoryTable.setRowSelectionInterval(row, row);
 			}
 		});
-		
 		
 		editButtonPopup.setText("Done");
 		editButtonPopup.setFont(new Font("Tahoma", Font.PLAIN, 14));
