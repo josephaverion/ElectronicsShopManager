@@ -115,80 +115,10 @@ public class BrandPanel extends JPanel {
 		JTable categoryTable = new JTable();
 		scrollPane.setViewportView(categoryTable);
 		
-		JPanel editPanel = new JPanel();
-		editPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		editPanel.setBackground(Color.WHITE);
-		categoryManager.add(editPanel);
-		editPanel.setLayout(null);
-		
-		editPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		editPanel.setBounds(21, 76, 1130, 621);
-		editPanel.setBackground(Color.WHITE);
-		editPanel.setLayout(null);
-
-		JTextField brandTxt2 = new JTextField();
-		brandTxt2.setBounds(342, 242, 274, 20);
-		brandTxt2.setColumns(10);
-		editPanel.add(brandTxt2);
-		
-		
-		JLabel nameLabel2 = new JLabel("Brand Name");
-		nameLabel2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		nameLabel2.setBounds(342, 217, 104, 20);
-		editPanel.add(nameLabel2);
-		
-		JComboBox<String> availability2 = new JComboBox<String>();
-		availability2.setOpaque(false);
-		availability2.setBackground(new Color(255, 255, 255));
-		availability2.setModel(new DefaultComboBoxModel<String>(new String[] {"Available", "Not Available"}));
-		availability2.setBounds(693, 241, 120, 22);
-		editPanel.add(availability2);
-		
-		JLabel statusLabel2 = new JLabel("Status");
-		statusLabel2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		statusLabel2.setBounds(693, 217, 104, 20);
-		editPanel.add(statusLabel2);
-		
-		
-		CustomJButton editButton = new CustomJButton();
-		editButton.setText("Edit");
-		editButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		editButton.setFocusable(false);
-		editButton.setColorOver(new Color(0, 240, 145));
-		editButton.setColorClick(new Color(32, 255, 166));
-		editButton.setColor(new Color(0, 211, 127));
-		editButton.setBorderColor(Color.WHITE);
-		editButton.setBackground(new Color(0, 211, 127));
-		editButton.setBounds(340, 280, 97, 41);
-		editPanel.add(editButton);
-		
-		JTextField idTxt = new JTextField();
-		idTxt.setColumns(10);
-		idTxt.setBounds(342, 186, 85, 20);
-		editPanel.add(idTxt);
-		
-		JLabel idLabel = new JLabel("Search By Brand ID");
-		idLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		idLabel.setBounds(342, 155, 156, 20);
-		editPanel.add(idLabel);
-		
-		CustomJButton deleteButton = new CustomJButton();
-		deleteButton.setText("Delete");
-		deleteButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		deleteButton.setFocusable(false);
-		deleteButton.setColorOver(new Color(0, 240, 145));
-		deleteButton.setColorClick(new Color(32, 255, 166));
-		deleteButton.setColor(new Color(0, 211, 127));
-		deleteButton.setBorderColor(Color.WHITE);
-		deleteButton.setBackground(new Color(0, 211, 127));
-		deleteButton.setBounds(475, 280, 97, 41);
-		editPanel.add(deleteButton);
-		
 		JButton addPanelButton = new JButton("Add");
 		addPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				overviewPanel.setVisible(false);
-				editPanel.setVisible(false);
 				addPanel.setVisible(true);
 			}
 		});
@@ -200,25 +130,12 @@ public class BrandPanel extends JPanel {
 		overviewPanelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addPanel.setVisible(false);
-				editPanel.setVisible(false);
 				overviewPanel.setVisible(true);
 			}
 		});
 		overviewPanelButton.setFocusable(false);
 		overviewPanelButton.setBounds(108, 695, 89, 26);
 		add(overviewPanelButton);
-		
-		JButton editPanelButton = new JButton("Edit");
-		editPanelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addPanel.setVisible(false);
-				overviewPanel.setVisible(false);
-				editPanel.setVisible(true);
-			}
-		});
-		editPanelButton.setFocusable(false);
-		editPanelButton.setBounds(196, 695, 89, 26);
-		add(editPanelButton);
 	}
 
 }
