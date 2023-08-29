@@ -219,7 +219,7 @@ public class CategoryPanel extends JPanel {
 			}
 		};
 		
-		Database.refreshTables(model);
+		Database.refreshTables(model, "categories");
 		categoryTable.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRender());
 		categoryTable.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(event));
 		
@@ -264,7 +264,7 @@ public class CategoryPanel extends JPanel {
 				editPopup.setVisible(false);		
 				scrollPane.setWheelScrollingEnabled(true);
 				categoryTable.setEnabled(true);
-				Database.refreshTables(model);
+				Database.refreshTables(model, "categories");
 				categoryTable.setRowSelectionInterval(row, row);
 			}
 		});
@@ -294,7 +294,7 @@ public class CategoryPanel extends JPanel {
 				Object[] toAdd = {cname, cavailible};
 				
 				Database.addEntry(columns, toAdd, "categories");
-				Database.refreshTables(model);
+				Database.refreshTables(model, "categories");
 				categoryTxt.setText("");
 				JOptionPane.showMessageDialog(null, "Category Added!");
 			}
