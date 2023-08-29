@@ -16,7 +16,6 @@ import screen.CategoryPanel;
 
 public class Database {
 	public static Connection con;
-	private static Statement st;
 	private static PreparedStatement pst;
 	private static ResultSet rs;
 	private static ResultSetMetaData rsmd;
@@ -29,67 +28,6 @@ public class Database {
 			System.out.println("error!");
 		} catch (SQLException ex) {
 			System.out.println("error!");
-		}
-	}
-	
-/* old hardcored version of adding to a category
-	public static void addCategory(String cname, String cavailible) {	
-		try {
-			pst = con.prepareStatement("INSERT INTO categories(category_name, category_availability) VALUES (?, ?)");
-			pst.setString(1, cname);
-			pst.setString(2, cavailible);
-			pst.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-*/
-	// add parameter of how table name, arraylist of column names and arraylist of variables to add
-	
-	
-	// work on making this work for any panel
-	public static void editCategory(String cname, String cavailible, int cId) {
-		try {
-			pst = con.prepareStatement("UPDATE categories set category_name = ?, category_availability = ? WHERE category_id = ?");
-			pst.setString(1, cname);
-			pst.setString(2, cavailible);
-			pst.setInt(3, cId);
-			pst.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	// work on making this work for any panel
-	public static void deleteCategory(int cId) {
-		try {
-			pst = con.prepareStatement("DELETE FROM categories WHERE category_id = ?");
-			pst.setInt(1, cId);
-			pst.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// work on making this work for any panel
-	public static String[] getCategory(String cId) {
-
-		try {
-			pst = con.prepareStatement("SELECT category_name,category_availability FROM categories WHERE category_id = ?");
-			pst.setString(1, cId);
-			rs = pst.executeQuery();
-
-			String[] data = {"", ""};
-
-			if (rs.next() == true)
-			{
-				data[0] = rs.getString(1);
-				data[1] = rs.getString(2);
-			} 
-			return data;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 	
@@ -119,7 +57,73 @@ public class Database {
 		}
 	}
 	
-//	public static void editEntry(String[] columns, )
+	public static void editEntry(String[] columns, Object[] toEdit, String tableName, String idType, int cId) {
+		try {
+			String columnNames = "";
+			String questionmarks = "";
+			for(int i = 0; i < columns.length; i++) {
+				columnNames = columnNames + columns[i] + " = ?";
+				if (i != columns.length - 1) {
+					columnNames = columnNames + ",";
+					questionmarks = questionmarks + ",";
+				}
+			}
+			pst = con.prepareStatement("UPDATE " + tableName + " set " + columnNames + " WHERE " + idType + " = ?");
+
+			for (int i = 0; i < toEdit.length; i++) {
+				if(toEdit[i].getClass().equals(String.class)) {
+					pst.setString(i+1, (String) toEdit[i]);
+				} else if (toEdit[i].getClass().equals(Integer.class)) {
+					pst.setInt(i+1, (Integer) toEdit[i]);
+				}
+			}
+			
+			pst.setInt(3, cId);
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteEntry(String tableName, String idType, int cId, DefaultTableModel model, int row) {
+		try {
+			pst = con.prepareStatement("DELETE FROM " + tableName + " WHERE " + idType + " = ?");
+			pst.setInt(1, cId);
+			pst.executeUpdate();
+			pst = con.prepareStatement("ALTER TABLE " + tableName + " AUTO_INCREMENT=1"); // if all entries are deleted, automatically starts from 1. probably will change to randomized IDs
+			pst.executeUpdate();
+			model.removeRow(row);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String[] getEntry(String[] columns, String tableName, String idType, int cId) {
+		try {
+			String columnNames = "";
+			for (int i = 0; i < columns.length; i++) {
+				columnNames = columnNames + columns[i];
+				if (i != columns.length - 1) {
+					columnNames = columnNames + ",";
+				}
+			}		
+			pst = con.prepareStatement("SELECT " + columnNames + " FROM " + tableName + " WHERE " + idType + " = ?");
+			pst.setInt(1, cId);
+			rs = pst.executeQuery();
+
+			String[] data = {"", ""};
+
+			if (rs.next() == true)
+			{
+				data[0] = rs.getString(1);
+				data[1] = rs.getString(2);
+			} 
+			return data;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public static void refreshTables(DefaultTableModel model) {
 		try {

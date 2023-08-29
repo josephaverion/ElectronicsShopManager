@@ -11,7 +11,7 @@ public class PanelAction extends JPanel {
 	 */
 	private ActionButton cmdEdit;
 	private ActionButton cmdDelete;
-	private ActionButton cmdView;
+	//private ActionButton cmdView;
 	
 	
 	public PanelAction() {
@@ -25,11 +25,12 @@ public class PanelAction extends JPanel {
 		cmdDelete.setBounds(53, 11, 23, 23);
 		add(cmdDelete);
 		
+		/*
 		cmdView = new ActionButton();
 		cmdView.setIcon(new ImageIcon(PanelAction.class.getResource("/icons8-view-16.png")));
 		cmdView.setBounds(86, 11, 23, 23);
 		add(cmdView);
-		
+		*/
 		
 	}
 	
@@ -47,13 +48,14 @@ public class PanelAction extends JPanel {
 				event.onDelete(row);
 			}
 		});
-		
+		/*
 		cmdView.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				event.onView(row);
 			}
 		});
+		*/
 	}
 
 }

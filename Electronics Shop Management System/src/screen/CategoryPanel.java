@@ -141,6 +141,7 @@ public class CategoryPanel extends JPanel {
 				return columnEditables[column];
 			}
 		});
+		DefaultTableModel model = (DefaultTableModel) categoryTable.getModel();
 		
 		JPanel editPopup = new JPanel();
 		
@@ -184,14 +185,16 @@ public class CategoryPanel extends JPanel {
 		overviewPanel.setComponentZOrder(editPopup, 0);
 		TableActionEvent event = new TableActionEvent() {
 			public void onEdit(int row) {
-				// add a popup of the various options you can choose
+				// work on: add randomized ID
+				// use row to grab the column		
 				editPopup.setVisible(true);		
 				scrollPane.setWheelScrollingEnabled(false);
 				overviewPanel.setComponentZOrder(editPopup, 0);
 				categoryTable.setEnabled(false);
 				
-				String cId = Integer.toString(row + 1);
-				String[] data = Database.getCategory(cId);
+				Integer cId = (Integer) model.getValueAt(row, 0);
+				String[] columns = {"category_name", "category_availability"};
+				String[] data = Database.getEntry(columns, "categories", "category_id", cId);
 				if (data == null) {
 					JOptionPane.showMessageDialog(null, "Category Doesn't Exist");
 					return;
@@ -204,14 +207,18 @@ public class CategoryPanel extends JPanel {
 			}
 			
 			public void onDelete(int row) {
-				System.out.println("Delete row: " + row);
+				if (categoryTable.isEditing()) {
+					categoryTable.getCellEditor().stopCellEditing();
+				}
+				int cId = (Integer) model.getValueAt(row, 0);
+				Database.deleteEntry("categories", "category_id", cId, model, row);
 			}
 			
 			public void onView(int row) {
 				System.out.println("View row: " + row);
 			}
 		};
-		DefaultTableModel model = (DefaultTableModel) categoryTable.getModel();
+		
 		Database.refreshTables(model);
 		categoryTable.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRender());
 		categoryTable.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(event));
@@ -246,8 +253,11 @@ public class CategoryPanel extends JPanel {
 				}
 				String cavailible = availabilityPopup.getSelectedItem().equals("Available") ? "YES" : "NO";
 				int row = categoryTable.getSelectedRow();
+				// use this for the edit button
 				int cId = (Integer) model.getValueAt(row, 0);
-				Database.editCategory(cname, cavailible, cId);		
+				String[] columns = {"category_name", "category_availability"};
+				Object[] toEdit = {cname, cavailible};
+				Database.editEntry(columns, toEdit, "categories", "category_id", cId);		
 				categoryTxt.setText("");
 				JOptionPane.showMessageDialog(null, "Category Edited!");
 				
@@ -319,6 +329,7 @@ public class CategoryPanel extends JPanel {
 				//Database.refreshTables();
 				addPanel.setVisible(false);
 				overviewPanel.setVisible(true);
+				categoryTable.getSelectionModel().clearSelection();
 			}
 		});
 		overviewPanelButton.setFocusable(false);
