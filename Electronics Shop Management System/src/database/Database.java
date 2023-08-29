@@ -125,9 +125,9 @@ public class Database {
 		}
 	}
 
-	public static void refreshTables(DefaultTableModel model) {
+	public static void refreshTables(DefaultTableModel model, String tableName) {
 		try {
-			pst = con.prepareStatement("SELECT * FROM categories");
+			pst = con.prepareStatement("SELECT * FROM " + tableName);
 			rs = pst.executeQuery();
 			rsmd = rs.getMetaData();
 			
