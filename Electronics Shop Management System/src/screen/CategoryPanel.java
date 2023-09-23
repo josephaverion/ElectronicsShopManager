@@ -38,6 +38,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CategoryPanel extends JPanel {
 
@@ -152,9 +153,9 @@ public class CategoryPanel extends JPanel {
 		editPopup.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		editPopup.setLayout(null);
 		
-		JLabel editTitlePopup = new JLabel("Edit Category Name and Availability");
+		JLabel editTitlePopup = new JLabel("Edit Category Information");
 		editTitlePopup.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		editTitlePopup.setBounds(82, 11, 423, 63);
+		editTitlePopup.setBounds(159, 11, 423, 63);
 		editPopup.add(editTitlePopup);
 		
 		JTextField nameTextFieldPopup = new JTextField();
@@ -194,7 +195,8 @@ public class CategoryPanel extends JPanel {
 				
 				Integer cId = (Integer) model.getValueAt(row, 0);
 				String[] columns = {"category_name", "category_availability"};
-				String[] data = Database.getEntry(columns, "categories", "category_id", cId);
+				Object[] objectData = Database.getEntry(columns, "categories", "category_id", cId);
+				String[] data = Arrays.copyOf(objectData, objectData.length, String[].class);
 				if (data == null) {
 					JOptionPane.showMessageDialog(null, "Category Doesn't Exist");
 					return;
@@ -258,7 +260,6 @@ public class CategoryPanel extends JPanel {
 				String[] columns = {"category_name", "category_availability"};
 				Object[] toEdit = {cname, cavailible};
 				Database.editEntry(columns, toEdit, "categories", "category_id", cId);		
-				categoryTxt.setText("");
 				JOptionPane.showMessageDialog(null, "Category Edited!");
 				
 				editPopup.setVisible(false);		

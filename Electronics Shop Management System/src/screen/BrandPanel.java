@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -140,9 +141,9 @@ public class BrandPanel extends JPanel {
 		editPopup.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		editPopup.setLayout(null);
 		
-		JLabel editTitlePopup = new JLabel("Edit Brand Name and Availability");
+		JLabel editTitlePopup = new JLabel("Edit Brand Information");
 		editTitlePopup.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		editTitlePopup.setBounds(82, 11, 423, 63);
+		editTitlePopup.setBounds(159, 11, 423, 63);
 		editPopup.add(editTitlePopup);
 		
 		JTextField nameTextFieldPopup = new JTextField();
@@ -173,8 +174,7 @@ public class BrandPanel extends JPanel {
 		overviewPanel.setComponentZOrder(editPopup, 0);
 		TableActionEvent event = new TableActionEvent() {
 			public void onEdit(int row) {
-				// work on: add randomized ID
-				// use row to grab the column		
+				// work on: add randomized ID???
 				editPopup.setVisible(true);		
 				scrollPane.setWheelScrollingEnabled(false);
 				overviewPanel.setComponentZOrder(editPopup, 0);
@@ -182,7 +182,8 @@ public class BrandPanel extends JPanel {
 				
 				Integer bId = (Integer) model.getValueAt(row, 0);
 				String[] columns = {"brand_name", "brand_availability"};
-				String[] data = Database.getEntry(columns, "brands", "brand_id", bId);
+				Object[] objectData = Database.getEntry(columns, "brands", "brand_id", bId);
+				String[] data = Arrays.copyOf(objectData, objectData.length, String[].class);
 				if (data == null) {
 					JOptionPane.showMessageDialog(null, "Brand Doesn't Exist");
 					return;
@@ -246,7 +247,6 @@ public class BrandPanel extends JPanel {
 				String[] columns = {"brand_name", "brand_availability"};
 				Object[] toEdit = {bname, bavailible};
 				Database.editEntry(columns, toEdit, "brands", "brand_id", bId);		
-				brandTxt.setText("");
 				JOptionPane.showMessageDialog(null, "Brand Edited!");
 				
 				editPopup.setVisible(false);		
