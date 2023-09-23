@@ -78,7 +78,7 @@ public class Database {
 				}
 			}
 			
-			pst.setInt(3, cId);
+			pst.setInt(toEdit.length+1, cId);
 			pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class Database {
 		}
 	}
 	
-	public static String[] getEntry(String[] columns, String tableName, String idType, int cId) {
+	public static Object[] getEntry(String[] columns, String tableName, String idType, int cId) {
 		try {
 			String columnNames = "";
 			for (int i = 0; i < columns.length; i++) {
@@ -111,20 +111,47 @@ public class Database {
 			pst.setInt(1, cId);
 			rs = pst.executeQuery();
 
-			String[] data = {"", ""};
+			Object[] data = new Object[columns.length];
+			for (int i = 0; i < data.length; i++) {
+				data[i] = "";
+			}
 
 			if (rs.next() == true)
 			{
-				data[0] = rs.getString(1);
-				data[1] = rs.getString(2);
-			} 
+				for (int i = 0; i < data.length; i++) {
+					if(data[i].getClass().equals(String.class)) {
+						data[i] = rs.getString(i+1);
+					} else if (data[i].getClass().equals(Integer.class)) {
+						data[i] = rs.getInt(i+1);
+					}
+				}
+			}
+
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
+	
+	public static String[] getColumn(String tableName, String columnName) {
+		try {
+			pst = con.prepareStatement("SELECT " + columnName + " FROM " + tableName);
+			rs = pst.executeQuery();
+			ArrayList<String> data = new ArrayList<String>();
+			while (rs.next()) {
+				data.add(rs.getString(1));
+			}
+			return  data.toArray(new String[data.size()]);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// add if you try delete a brand or category where there are still products with quantity then add a popup that there is still product in stock
+	// whetever a category or brand gets updated (added or deleted), the jcombobox list in product and order "add" and "edit" panels must be updated
+	
 	public static void refreshTables(DefaultTableModel model, String tableName) {
 		try {
 			pst = con.prepareStatement("SELECT * FROM " + tableName);
